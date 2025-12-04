@@ -254,12 +254,19 @@ class App {
         if (this.selectedBrick) {
             const x = (parseInt(this.selectedBrick.dataset.x) || 0) + deltaX;
             const y = (parseInt(this.selectedBrick.dataset.y) || 0) + deltaY;
-            this.selectedBrick.dataset.x = x;
-            this.selectedBrick.dataset.y = y;
+
+            const rect = this.selectedBrick.getBoundingClientRect();
+            
+            // накладываем ограничения на перемещения
+            const minX = -this.gridRect.left;
+            const minY = -this.gridRect.top;
+            const maxX = document.body.clientWidth + minX - rect.width;
+            const maxY = document.body.clientHeight + minY - rect.height;
+
+            this.selectedBrick.dataset.x = Math.max(minX, Math.min(maxX, x));
+            this.selectedBrick.dataset.y = Math.max(minY, Math.min(maxY, y));
             this.selectedBrick.style.setProperty('--x', this.selectedBrick.dataset.x + 'px');
             this.selectedBrick.style.setProperty('--y', this.selectedBrick.dataset.y + 'px');
-            // this.selectedBrick.style.transform = `translate(${this.selectedBrick.dataset.x}px, ${this.selectedBrick.dataset.y}px)`;
-            // const coord = this.getGridCoord(r.left, r.top);
         }
     }
 
