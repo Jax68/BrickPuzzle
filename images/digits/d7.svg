@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 10 16" xmlns="http://www.w3.org/2000/svg">
+ <linearGradient id="linear" y2="1">
+  <stop stop-color="#b9b9b9" offset="0.1"/>
+  <stop stop-color="#ffffff" offset="0.9"/>
+ </linearGradient>
+ <g stroke-linecap="square" stroke-width="0">
+  <path d="m5 10v-4h-4v-4h8v12h-4z" fill="#3f3f3f"/>
+  <path d="m6 9v-4h-4v-2h6v10h-2z" fill="url(#linear)"/>
+ </g>
+</svg>

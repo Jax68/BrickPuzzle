@@ -1,0 +1,215 @@
+* {
+	-webkit-touch-callout: none;  /* Главное свойство против вибрации */
+	-webkit-user-select: none;    /* Дополнительно */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+:root {
+    --zi-socket: 0;
+    --zi-normal: 10;
+    --zi-dragged: 100;
+    --border-width: 0.3vmin;
+    --overlay-inset: 11%;
+    --color-dark: #3f3f3fff;
+    --color-medium: #848684ff;
+    --color-light: #efebefff;
+    --color-primary: rgb(196, 143, 0);
+    --color-primary-glow: rgba(255, 194, 27, 0.2);
+}
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh;
+    overflow: hidden;
+    background-color: silver;
+    background-image: url('../images/metal.png');
+    background-repeat: repeat;
+    font-family: Arial, sans-serif;
+}
+
+#container {
+    aspect-ratio: var(--grid-col-count) / var(--grid-row-count);
+
+    /* Занимает всю доступную площадь */
+    width: min(100%, calc(100dvh * var(--grid-col-count) / var(--grid-row-count)));
+    height: min(100%, calc(100dvw * var(--grid-col-count) / var(--grid-row-count)));
+
+    /* Максимальные ограничения */
+    max-width: 100dvw;
+    max-height: 100dvh;
+
+    display: grid;
+    grid-template-columns: repeat(var(--grid-col-count), 1fr);
+    grid-template-rows: repeat(var(--grid-row-count), 1fr);
+}
+
+.brick {
+    pointer-events: none;
+    touch-action: none;     /* Отключаем стандартные жесты браузера */
+    user-select: none;      /* Запрещаем выделение */
+    position: relative;
+    display: grid;
+}
+
+.brick.item {
+    z-index: var(--zi-normal);
+}
+
+.brick.item[data-dragged="true"] {
+    position: absolute;
+    transform: translate(calc(var(--x, 0px)), calc(var(--y, 0px)));
+    z-index: var(--zi-dragged);
+    opacity: 0.5;
+}
+
+.brick > * {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.brick.item > * {
+    pointer-events: all;    /* Включаем события мышки */
+    touch-action: all;     /* Отключаем стандартные жесты браузера */
+    user-select: none;      /* Запрещаем выделение */
+    border-width: var(--border-width);
+    border-style: solid;
+    --border-color: #4a494aff;
+    --gradient-color1: #efebefff;
+    --gradient-color2: #848684ff;
+    border-color: var(--border-color);
+    background: linear-gradient(to bottom right, var(--gradient-color1), var(--gradient-color2));
+}
+
+.brick.item > *::after {
+    touch-action: none;     /* Отключаем стандартные жесты браузера */
+    user-select: none;      /* Запрещаем выделение */
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: var(--overlay-inset);
+    background: linear-gradient(to top left, var(--gradient-color1), var(--gradient-color2));
+}
+
+.brick[data-id="0"] > * {
+    --border-color: #00309cff;
+    --gradient-color1: #9c9affff;
+    --gradient-color2: #00309cff;
+}
+
+.brick[data-id="1"] > * {
+    --border-color: #4a494aff;
+    --gradient-color1: #efebefff;
+    --gradient-color2: #848684ff;
+}
+
+.brick[data-id="2"] > * {
+    --border-color: #630021ff;
+    --gradient-color1: #ff6563ff;
+    --gradient-color2: #630021ff;
+}
+
+.brick[data-id="3"] > * {
+    --border-color: #52004aff;
+    --gradient-color1: #ff51c6ff;
+    --gradient-color2: #840073ff;
+}
+
+.brick[data-id="4"] > * {
+    --border-color: #631c00ff;
+    --gradient-color1: #ffc363ff;
+    --gradient-color2: #9c3400ff;
+}
+
+.brick[data-id="5"] > * {
+    --border-color: #424100ff;
+    --gradient-color1: #bdff42ff;
+    --gradient-color2: #6b7500ff;
+}
+
+.brick[data-id="6"] > * {
+    --border-color: #9c0042ff;
+    --gradient-color1: #ff9aa5ff;
+    --gradient-color2: #ce004aff;
+}
+
+.brick[data-id="7"] > * {
+    --border-color: #5a009cff;
+    --gradient-color1: #f79affff;
+    --gradient-color2: #8400ceff;
+}
+
+.brick[data-id="8"] > * {
+    --border-color: #184100ff;
+    --gradient-color1: #63ff42ff;
+    --gradient-color2: #297500ff;
+}
+
+.brick[data-id="9"] > * {
+    --border-color: #003842ff;
+    --gradient-color1: #42aeffff;
+    --gradient-color2: #006173ff;
+}
+
+.brick[data-id="10"] > * {
+    --border-color: #734900ff;
+    --gradient-color1: #ffff73ff;
+    --gradient-color2: #a57900ff;
+}
+
+.brick[data-id="11"] > * {
+    --border-color: #004121ff;
+    --gradient-color1: #42ffe7ff;
+    --gradient-color2: #007542ff;
+}
+
+#board {
+    display: grid;
+    box-sizing: border-box;
+    border-left: var(--border-width) solid var(--color-dark);
+    border-top: var(--border-width) solid var(--color-dark);
+    border-right: var(--border-width) solid var(--color-light);
+    border-bottom: var(--border-width) solid var(--color-light);
+}
+
+.socketed > * {
+    border-left: var(--border-width) solid var(--color-medium);
+    border-top: var(--border-width) solid var(--color-medium);
+    border-right: var(--border-width) solid var(--color-light);
+    border-bottom: var(--border-width) solid var(--color-light);
+    z-index: var(--zi-socket);
+}
+
+#helpTabsContainer {
+    width: 50vw;
+    min-height: 400px;
+    height: 100%;
+}
+
+@media (max-width: 768px), (max-height: 768px) and (orientation: landscape) {
+    #helpTabsContainer {
+        width: auto;
+    }
+}
+
+.about-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url('../images/BrickPuzzle.ico');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#logo {
+    grid-area: 14 / 18 / 15 / 21;
+    background-image: url('../images/JXDesign.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+    image-rendering: pixelated;
+}
